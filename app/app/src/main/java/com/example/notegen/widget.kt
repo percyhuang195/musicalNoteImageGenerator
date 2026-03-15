@@ -47,7 +47,7 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
                 Modifier
                     .offset(
                         0.dp,
-                        ((size / 8) * (14 - noteList[i].note) * 0.5).dp
+                        ((size / 8) * (14 - noteList[i].note) * 0.5 + 2).dp
                     )
                     .size((size / 8).dp)
                     .background(
