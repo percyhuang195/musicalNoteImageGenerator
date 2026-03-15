@@ -1,0 +1,129 @@
+package com.example.notegen
+
+import android.util.Log.i
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+
+data class noteObject(
+    var note : Int = 1,
+    var octHighOrLow : Int = 0,
+    var halfHighOrLow : Int = 0,
+)
+
+@Composable
+fun noteGenerator(size: Int,noteList: List<noteObject>){
+    var lines by remember { mutableStateOf(5) }
+    var sizeNumber by remember { mutableStateOf((size / 70)) }
+    Box(
+        modifier = Modifier
+            .width(size.dp)
+            .height(size.dp)
+            .background(
+                color = Color(0xFFFFFFFF)
+            ),
+        contentAlignment = Alignment.TopCenter
+    ){
+        for (i in 0 until noteList.count()){
+            Box(
+                Modifier
+                    .offset(
+                        0.dp,
+                        ((size / 8) * (14 - noteList[i].note) * 0.5).dp
+                    )
+                    .size((size / 8).dp)
+                    .background(
+                        color = Color.Black,
+                        shape = CircleShape
+                    ),
+                contentAlignment = Alignment.Center
+            ){
+                Box(
+                    Modifier
+                        .size((size / 8 - 5).dp)
+                        .background(
+                            color = Color.White,
+                            shape = CircleShape
+                        ),
+                )
+            }
+        }
+        for (i in 0 until noteList.count()){
+            if (noteList[i].note == 1){
+                Box(
+                    modifier = Modifier
+                        .offset(
+                            0.dp,
+                            ((size / 8) * 7).dp
+                        )
+                        .fillMaxWidth(0.2f)
+                        .height(sizeNumber.dp)
+                        .background(
+                            color = Color(0xFF000000)
+                        )
+                )
+            }
+            if (noteList[i].note >= 13){
+                Box(
+                    modifier = Modifier
+                        .offset(
+                            0.dp,
+                            ((size / 8) ).dp
+                        )
+                        .fillMaxWidth(0.2f)
+                        .height(sizeNumber.dp)
+                        .background(
+                            color = Color(0xFF000000)
+                        )
+                )
+            }
+        }
+        Column(Modifier.fillMaxSize()) {
+            Spacer(
+                Modifier.height((size / 8).dp)
+            )
+            Spacer(
+                Modifier.height((size / 8).dp)
+            )
+            LazyColumn(
+            ) {
+                items(lines){
+                    Column (
+                        Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ){
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(0.9f)
+                                .height(sizeNumber.dp)
+                                .background(
+                                    color = Color(0xFF000000)
+                                )
+                        )
+                        Spacer(
+                            Modifier.height((size / 8 - sizeNumber).dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
