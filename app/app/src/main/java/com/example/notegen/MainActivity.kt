@@ -139,7 +139,7 @@ class MainActivity : ComponentActivity() {
                                                     Spacer(Modifier.width(10.dp))
                                                     Slider(
                                                         valueRange = 1f..14f,
-                                                        steps = 13,
+                                                        steps = 12,
                                                         value = noteList[index].note.toFloat(),
                                                         onValueChange = {
                                                             noteList[index] = noteList[index].copy(note = it.toInt())
