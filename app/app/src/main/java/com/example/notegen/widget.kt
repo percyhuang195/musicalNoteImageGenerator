@@ -48,19 +48,8 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
         contentAlignment = Alignment.TopCenter
     ){
         noteLeft.clear()
-        displayList = noteList.toMutableList()
-        displayList.sortedBy { it.note }
-        var removeList = mutableListOf<Int>()
-        for (i in 0 until displayList.count()){
-            for (j in 0 until displayList.count()){
-                if (displayList[i].note == displayList[j].note){
-                    removeList.add(i)
-                }
-            }
-        }
-        for (i in removeList.count() until 0){
-            displayList.removeAt(removeList[i])
-        }
+        displayList = noteList.distinct().sortedBy { it.note }.toMutableList()
+        // 判斷錯位
         for (i in 0 until displayList.count()){
             if (i == 0){
                 noteLeft.add(false)
@@ -79,8 +68,7 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
                 }
             }
         }
-//        Log.d("percy",removeList.toString())
-        Log.d("percy",displayList.count().toString())
+        Log.d("percy",noteLeft.toString())
         for (i in 0 until displayList.count()){
             Box(
                 Modifier
@@ -139,8 +127,7 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
             Spacer(
                 Modifier.height((size / 8).dp)
             )
-            LazyColumn(
-            ) {
+            LazyColumn{
                 items(lines){
                     Column (
                         Modifier.fillMaxWidth(),
