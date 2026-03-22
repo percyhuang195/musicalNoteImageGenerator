@@ -1,5 +1,6 @@
 package com.example.notegen
 
+import android.util.Log
 import android.util.Log.i
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -22,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import kotlin.math.abs
 
 data class noteObject(
     var note : Int = 1,
@@ -33,6 +36,8 @@ data class noteObject(
 fun noteGenerator(size: Int,noteList: List<noteObject>){
     var lines by remember { mutableStateOf(5) }
     var sizeNumber by remember { mutableStateOf((size / 70)) }
+    var noteLeft = remember { mutableStateListOf<Boolean>() }
+    var displayList : MutableList<noteObject> = mutableListOf()
     Box(
         modifier = Modifier
             .width(size.dp)
@@ -42,12 +47,34 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
             ),
         contentAlignment = Alignment.TopCenter
     ){
-        for (i in 0 until noteList.count()){
+        noteLeft.clear()
+        displayList = noteList.distinct().sortedBy { it.note }.toMutableList()
+        // 判斷錯位
+        for (i in 0 until displayList.count()){
+            if (i == 0){
+                noteLeft.add(false)
+            }else if (noteLeft[i - 1]){
+                noteLeft.add(false)
+            }else {
+                for (j in 0 until i){
+                    if (noteLeft.count() <= i){
+                        if (abs(displayList[i].note - displayList[j].note) == 1){
+                            noteLeft.add(true)
+                        }
+                    }
+                }
+                if (noteLeft.count() <= i){
+                    noteLeft.add(false)
+                }
+            }
+        }
+        Log.d("percy",noteLeft.toString())
+        for (i in 0 until displayList.count()){
             Box(
                 Modifier
                     .offset(
-                        0.dp,
-                        ((size / 8) * (14 - noteList[i].note) * 0.5 + 2).dp
+                        (if (noteLeft[i]) size / 8 - 5 else 0).dp,
+                        ((size / 8) * (14 - displayList[i].note) * 0.5 + 2).dp
                     )
                     .size((size / 8).dp)
                     .background(
@@ -62,12 +89,9 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
                         .background(
                             color = Color.White,
                             shape = CircleShape
-                        ),
-                )
+                        ),)
             }
-        }
-        for (i in 0 until noteList.count()){
-            if (noteList[i].note == 1){
+            if (displayList[i].note == 1){
                 Box(
                     modifier = Modifier
                         .offset(
@@ -81,12 +105,12 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
                         )
                 )
             }
-            if (noteList[i].note >= 13){
+            if (displayList[i].note >= 13){
                 Box(
                     modifier = Modifier
                         .offset(
                             0.dp,
-                            ((size / 8) ).dp
+                            ((size / 8)).dp
                         )
                         .fillMaxWidth(0.2f)
                         .height(sizeNumber.dp)
@@ -103,8 +127,7 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
             Spacer(
                 Modifier.height((size / 8).dp)
             )
-            LazyColumn(
-            ) {
+            LazyColumn{
                 items(lines){
                     Column (
                         Modifier.fillMaxWidth(),
