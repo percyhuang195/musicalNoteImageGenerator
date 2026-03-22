@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -35,9 +36,10 @@ data class noteObject(
 @Composable
 fun noteGenerator(size: Int,noteList: List<noteObject>){
     var lines by remember { mutableStateOf(5) }
-    var sizeNumber by remember { mutableStateOf((size / 70)) }
+    var sizeNumber by remember { mutableStateOf((size / 100)) }
     var noteLeft = remember { mutableStateListOf<Boolean>() }
     var displayList : MutableList<noteObject> = mutableListOf()
+    var size = 300
     Box(
         modifier = Modifier
             .width(size.dp)
@@ -68,15 +70,15 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
                 }
             }
         }
-        Log.d("percy",noteLeft.toString())
         for (i in 0 until displayList.count()){
             Box(
                 Modifier
                     .offset(
-                        (if (noteLeft[i]) size / 8 - 5 else 0).dp,
-                        ((size / 8) * (14 - displayList[i].note) * 0.5 + 2).dp
+                        (if (noteLeft[i]) size / 10 + 10 else 0).dp,
+                        ((size / 10) * (16 - displayList[i].note) * 0.5 + 2).dp
                     )
-                    .size((size / 8).dp)
+                    .width((size / 10 + 15).dp)
+                    .height((size / 10).dp)
                     .background(
                         color = Color.Black,
                         shape = CircleShape
@@ -85,7 +87,8 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
             ){
                 Box(
                     Modifier
-                        .size((size / 8 - 5).dp)
+                        .width((size / 10 - 10).dp)
+                        .height((size / 10 - 7).dp)
                         .background(
                             color = Color.White,
                             shape = CircleShape
@@ -96,7 +99,7 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
                     modifier = Modifier
                         .offset(
                             0.dp,
-                            ((size / 8) * 7).dp
+                            ((size / 10) * 8).dp
                         )
                         .fillMaxWidth(0.2f)
                         .height(sizeNumber.dp)
@@ -110,7 +113,7 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
                     modifier = Modifier
                         .offset(
                             0.dp,
-                            ((size / 8)).dp
+                            ((size / 10) * 2).dp
                         )
                         .fillMaxWidth(0.2f)
                         .height(sizeNumber.dp)
@@ -122,10 +125,7 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
         }
         Column(Modifier.fillMaxSize()) {
             Spacer(
-                Modifier.height((size / 8).dp)
-            )
-            Spacer(
-                Modifier.height((size / 8).dp)
+                Modifier.height((size / 10 * 3).dp)
             )
             LazyColumn{
                 items(lines){
@@ -142,7 +142,7 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
                                 )
                         )
                         Spacer(
-                            Modifier.height((size / 8 - sizeNumber).dp)
+                            Modifier.height((size / 10 - sizeNumber).dp)
                         )
                     }
                 }
