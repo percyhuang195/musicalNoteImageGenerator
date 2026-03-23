@@ -1,5 +1,6 @@
 package com.example.notegen
 
+import android.health.connect.datatypes.ExercisePerformanceGoal
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -108,14 +109,32 @@ class MainActivity : ComponentActivity() {
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Column() {
-                                            Row() {
+                                            Row(verticalAlignment = Alignment.CenterVertically) {
                                                 Spacer(Modifier.width(20.dp))
                                                 Box(
                                                     modifier = Modifier.width(30.dp)
                                                 ){
                                                     Text(noteNameList[(noteList[index].note - 1) % 7])
                                                 }
-                                                Spacer(Modifier.weight(1f))
+                                                Spacer(Modifier.weight(0.25f))
+                                                Text("b")
+                                                Spacer(Modifier.weight(0.05f))
+                                                Row(
+                                                    modifier = Modifier.weight(0.4f),
+                                                    verticalAlignment = Alignment.CenterVertically
+                                                ) {
+                                                    Slider(
+                                                        value = noteList[index].halfHighOrLow.toFloat(),
+                                                        valueRange = -1f..1f,
+                                                        steps = 1,
+                                                        onValueChange = {
+                                                            noteList[index] = noteList[index].copy(halfHighOrLow = it.toInt())
+                                                        }
+                                                    )
+                                                }
+                                                Spacer(Modifier.weight(0.05f))
+                                                Text("#")
+                                                Spacer(Modifier.weight(0.25f))
                                                 IconButton(
                                                     onClick = {
                                                         noteList.removeAt(index)
