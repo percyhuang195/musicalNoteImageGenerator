@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -23,8 +24,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import kotlin.math.PI
 import kotlin.math.abs
 
 data class noteObject(
@@ -93,6 +97,35 @@ fun noteGenerator(size: Int,noteList: List<noteObject>){
                             color = Color.White,
                             shape = CircleShape
                         ),)
+            }
+            if (displayList[i].halfHighOrLow == 1){
+                Box(
+                    Modifier
+                        .offset(
+                            (-40).dp,
+                            ((size / 10) * (16 - displayList[i].note) * 0.5 - 12).dp
+                        )
+                        .rotate(170f)
+                ){
+                    Text(
+                        "#",
+                        fontSize = 50.sp,
+                    )
+                }
+            }
+            if (displayList[i].halfHighOrLow == -1){
+                Box(
+                    Modifier
+                        .offset(
+                            (-40).dp,
+                            ((size / 10) * (16 - displayList[i].note) * 0.5 - 60).dp
+                        )
+                ){
+                    Text(
+                        "♭",
+                        fontSize = 80.sp,
+                    )
+                }
             }
             if (displayList[i].note == 1){
                 Box(
